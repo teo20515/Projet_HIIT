@@ -1,5 +1,6 @@
 package com.example.projet_hiit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,5 +20,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void creerNouvelEntrainement(View view) {
+        Intent intent = new Intent(this,CreerEntrainementActivity.class);
+        startActivity(intent);
     }
 }

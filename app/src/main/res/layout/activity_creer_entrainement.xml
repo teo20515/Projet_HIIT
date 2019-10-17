@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreerEntrainementActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Creer une nouvelle séance"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@color/lightBlue"
+            android:padding="3sp"
+            android:layout_marginBottom="35sp"/>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temps de préparation :"
+            android:layout_margin="2sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementPreparation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time"
+            android:hint="Temps de préparation initial en secondes"
+            android:backgroundTint="@color/midBlue"/>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="travail : "
+            android:layout_marginTop="35sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementNomTravail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:hint="Nom du travail"
+            android:backgroundTint="@color/midBlue"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementDureeTravail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time"
+            android:hint="Durée du travail en secondes"
+            android:backgroundTint="@color/midBlue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Durée du repos :"
+            android:layout_marginTop="15sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementDureeRepos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time"
+            android:hint="Durée du repos en secondes"
+            android:backgroundTint="@color/midBlue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre de répétitions du cycle :"
+            android:layout_marginTop="15sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementRepetitionsCycle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time"
+            android:hint="Nombre de répétitions"
+            android:backgroundTint="@color/midBlue"/>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temps de repos long"
+            android:layout_marginTop="35sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementDureeReposLong"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="time"
+            android:hint="Temps de repos long en secondes"
+            android:backgroundTint="@color/midBlue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Nombre de répétitions de la séquence"
+            android:layout_marginTop="15sp"/>
+
+        <EditText
+            android:id="@+id/creerEntrainementRepetitionsSequence"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:hint="Nombre de répétitions"
+            android:backgroundTint="@color/midBlue"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valider"
+            android:layout_gravity="center"
+            android:onClick="creerNouvelleSeance"
+            android:layout_marginTop="35sp"/>
+
+    </LinearLayout>
+</ScrollView>
