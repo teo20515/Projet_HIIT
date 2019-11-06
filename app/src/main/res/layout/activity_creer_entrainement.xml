@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10sp">
 
         <TextView
             android:layout_width="match_parent"
@@ -16,12 +17,15 @@
             android:text="Creer une nouvelle séance"
             android:textSize="30sp"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:background="@color/lightBlue"
+            android:textColor="@color/lightBlue"
             android:padding="3sp"
-            android:layout_marginBottom="35sp"/>
+            android:layout_marginBottom="15sp"/>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/customborder">
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,13 +41,19 @@
             android:hint="Temps de préparation initial en secondes"
             android:backgroundTint="@color/midBlue"/>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/customborder">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="travail : "
-            android:layout_marginTop="35sp"/>
+            android:text="travail : "/>
 
         <EditText
             android:id="@+id/creerEntrainementNomTravail"
@@ -81,6 +91,7 @@
             android:text="Nombre de répétitions du cycle :"
             android:layout_marginTop="15sp"/>
 
+
         <EditText
             android:id="@+id/creerEntrainementRepetitionsCycle"
             android:layout_width="match_parent"
@@ -89,13 +100,19 @@
             android:hint="Nombre de répétitions"
             android:backgroundTint="@color/midBlue"/>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/customborder">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Temps de repos long"
-            android:layout_marginTop="35sp"/>
+            android:text="Temps de repos long"/>
 
         <EditText
             android:id="@+id/creerEntrainementDureeReposLong"
@@ -105,11 +122,19 @@
             android:hint="Temps de repos long en secondes"
             android:backgroundTint="@color/midBlue"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/customborder">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Nombre de répétitions de la séquence"
-            android:layout_marginTop="15sp"/>
+            android:text="Nombre de répétitions de la séquence"/>
 
         <EditText
             android:id="@+id/creerEntrainementRepetitionsSequence"
@@ -117,7 +142,9 @@
             android:layout_height="match_parent"
             android:inputType="number"
             android:hint="Nombre de répétitions"
-            android:backgroundTint="@color/midBlue"/>
+            android:backgroundTint="@color/midBlue" />
+
+    </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -125,7 +152,10 @@
             android:text="Valider"
             android:layout_gravity="center"
             android:onClick="creerNouvelleSeance"
-            android:layout_marginTop="35sp"/>
+            android:layout_marginTop="15sp"
+            android:background="@color/midBlue"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
+
 </ScrollView>

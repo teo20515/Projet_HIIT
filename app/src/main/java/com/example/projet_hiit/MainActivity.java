@@ -8,15 +8,23 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.projet_hiit.db.DatabaseClient;
 
 public class MainActivity extends AppCompatActivity {
+
+    private DatabaseClient db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Glide.with(getApplicationContext()).load(R.drawable.tapis_roulant).into((ImageView) findViewById(R.id.main_gif_container));
+        //Affichage du gif animé
+        Glide.with(getApplicationContext()).load(R.drawable.main_tapis_roulant).into((ImageView) findViewById(R.id.main_gif_container));
+
+        //Instantiation de la base de données
+        db = DatabaseClient.getInstance(getApplicationContext());
+
     }
 
     public void creerNouvelEntrainement(View view) {
