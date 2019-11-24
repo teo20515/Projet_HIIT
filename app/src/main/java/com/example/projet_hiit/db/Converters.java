@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 
 public class Converters {
 
-    private Gson gson = new Gson();
+    private static Gson gson = new Gson();
 
     ///////Travail converters///////
     @TypeConverter

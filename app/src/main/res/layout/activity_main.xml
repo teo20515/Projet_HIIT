@@ -25,13 +25,10 @@
         android:background="@color/midBlue"
         android:textColor="@color/white"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
             android:orientation="vertical"
             android:gravity="start">
 
@@ -41,8 +38,6 @@
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>
 

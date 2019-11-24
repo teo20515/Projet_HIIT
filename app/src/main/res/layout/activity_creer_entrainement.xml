@@ -30,6 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="Temps de préparation :"
             android:layout_margin="2sp"/>
 
@@ -53,7 +54,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="travail : "/>
+            android:textStyle="bold"
+            android:text="Travail : "/>
 
         <EditText
             android:id="@+id/creerEntrainementNomTravail"
@@ -74,6 +76,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textStyle="bold"
             android:text="Durée du repos :"
             android:layout_marginTop="15sp"/>
 
@@ -88,6 +91,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="Nombre de répétitions du cycle :"
             android:layout_marginTop="15sp"/>
 
@@ -112,6 +116,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="Temps de repos long"/>
 
         <EditText
@@ -134,6 +139,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textStyle="bold"
             android:text="Nombre de répétitions de la séquence"/>
 
         <EditText

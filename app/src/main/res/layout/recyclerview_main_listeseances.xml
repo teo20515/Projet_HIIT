@@ -1,18 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/rvSeance"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10sp"
-    android:background="@drawable/customborder">
+    android:layout_margin="5sp"
+    android:background="@drawable/customborder_medium_lightblue"
+    android:longClickable="true">
+
+    <LinearLayout
+        android:tag="preparation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Preparation :"/>
+
+        <TextView
+            android:tag="rv_dureePreparation"
+            android:id="@+id/rv_dureePreparation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text=""/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="s"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:tag="sequence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/customborder_medium"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:tag="cycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/customborder"
+            android:orientation="horizontal">
+            <TextView
+                android:tag="rv_nomTravail"
+                android:id="@+id/rv_nomTravail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text=""/>
+            <TextView
+                android:paddingStart="10sp"
+                android:paddingEnd="0sp"
+                android:tag="rv_dureeTravail"
+                android:id="@+id/rv_dureeTravail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text=""/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="s"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="end">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="Repos :"/>
+                <TextView
+                    android:paddingStart="10sp"
+                    android:tag="rv_dureeRepos"
+                    android:id="@+id/rv_dureeRepos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text=""/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="s"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:tag="rv_nbRepetitionsCycle"
+            android:id="@+id/rv_nbRepetitionsCycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:text=""/>
+
+        <LinearLayout
+            android:tag="repos_long"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8sp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="Repos long :"/>
+            <TextView
+                android:paddingStart="10sp"
+                android:tag="rv_dureeReposLong"
+                android:id="@+id/rv_dureeReposLong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text=""/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="s"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/nomTravail"
+        android:tag="rv_nbRepetitionsSequence"
+        android:id="@+id/rv_nbRepetitionsSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textStyle="bold"
         android:textSize="15sp"
-
-        android:text="test"/>
+        android:text=""/>
 
 </LinearLayout>

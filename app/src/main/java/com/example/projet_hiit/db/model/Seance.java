@@ -1,5 +1,8 @@
 package com.example.projet_hiit.db.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class Seance implements Serializable {
+public class Seance implements Serializable, Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -24,6 +27,23 @@ public class Seance implements Serializable {
         this.sequence = sequence;
         this.preparation = preparation;
     }
+
+    protected Seance(Parcel in) {
+        id = in.readInt();
+        preparation = in.readInt();
+    }
+
+    public static final Creator<Seance> CREATOR = new Creator<Seance>() {
+        @Override
+        public Seance createFromParcel(Parcel in) {
+            return new Seance(in);
+        }
+
+        @Override
+        public Seance[] newArray(int size) {
+            return new Seance[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -49,5 +69,16 @@ public class Seance implements Serializable {
 
     public int getTempsTotal(){
         return (getSequence().getTempsTotal()+getPreparation());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(preparation);
     }
 }
