@@ -1,5 +1,8 @@
 package com.example.projet_hiit.db.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,7 +13,7 @@ import com.example.projet_hiit.db.Converters;
 import java.io.Serializable;
 
 @Entity
-public class Sequence implements Serializable {
+public class Sequence implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -30,6 +33,38 @@ public class Sequence implements Serializable {
         this.reposLong = reposLong;
         this.repetitions = repetitions;
     }
+
+    protected Sequence(Parcel in) {
+        id = in.readInt();
+        cycle = in.readParcelable(Cycle.class.getClassLoader());
+        reposLong = in.readInt();
+        repetitions = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeParcelable(cycle, flags);
+        dest.writeInt(reposLong);
+        dest.writeInt(repetitions);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Sequence> CREATOR = new Creator<Sequence>() {
+        @Override
+        public Sequence createFromParcel(Parcel in) {
+            return new Sequence(in);
+        }
+
+        @Override
+        public Sequence[] newArray(int size) {
+            return new Sequence[size];
+        }
+    };
 
     public int getId() {
         return id;

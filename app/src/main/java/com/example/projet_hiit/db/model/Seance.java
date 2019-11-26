@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class Seance implements Serializable, Parcelable {
+public class Seance implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -30,7 +30,20 @@ public class Seance implements Serializable, Parcelable {
 
     protected Seance(Parcel in) {
         id = in.readInt();
+        sequence = in.readParcelable(Sequence.class.getClassLoader());
         preparation = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeParcelable(sequence, flags);
+        dest.writeInt(preparation);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Seance> CREATOR = new Creator<Seance>() {
@@ -71,14 +84,4 @@ public class Seance implements Serializable, Parcelable {
         return (getSequence().getTempsTotal()+getPreparation());
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(preparation);
-    }
 }

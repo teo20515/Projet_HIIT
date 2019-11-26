@@ -33,7 +33,7 @@ dependencies {
     }
 
     //ROOM
-    def room_version = "2.2.1"
+    def room_version = "2.2.2"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
@@ -43,6 +43,6 @@ dependencies {
     //RECYCLER VIEW
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.appcompat:appcompat-resources:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
 }

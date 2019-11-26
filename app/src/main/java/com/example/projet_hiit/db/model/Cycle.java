@@ -1,5 +1,8 @@
 package com.example.projet_hiit.db.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class Cycle implements Serializable {
+public class Cycle implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -26,6 +29,38 @@ public class Cycle implements Serializable {
         this.repos = repos;
         this.repetitions = repetitions;
     }
+
+    protected Cycle(Parcel in) {
+        id = in.readInt();
+        travail = in.readParcelable(Travail.class.getClassLoader());
+        repos = in.readInt();
+        repetitions = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeParcelable(travail, flags);
+        dest.writeInt(repos);
+        dest.writeInt(repetitions);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Cycle> CREATOR = new Creator<Cycle>() {
+        @Override
+        public Cycle createFromParcel(Parcel in) {
+            return new Cycle(in);
+        }
+
+        @Override
+        public Cycle[] newArray(int size) {
+            return new Cycle[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -63,4 +98,5 @@ public class Cycle implements Serializable {
     public int getTempsTotal(){
         return (getTravail().getDuree()+getRepos());
     }
+
 }

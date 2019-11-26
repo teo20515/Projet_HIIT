@@ -22,7 +22,6 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
     private ItemClickListener clickListener;
     private ItemLongClickListener longClickListener;
 
-
     public RecyclerViewListeSeancesAdapter(Context context, List<Seance> data) {
         this.inflater = LayoutInflater.from(context);
         this.data = data;
@@ -126,4 +125,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         this.longClickListener = itemLongClickListener;
     }
 
+    public void setData(List<Seance> data) {
+        this.data = data;
+    }
 }
