@@ -2,6 +2,7 @@ package com.example.projet_hiit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,7 +20,6 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
 
     //View
     private TextView timerValue;
-    private LinearLayout mainLayout;
     private TextView nomTravail;
 
     //DATA
@@ -37,7 +37,6 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         //Initialisation
         this.timerValue = findViewById(R.id.timerValue);
         this.seance = getIntent().getParcelableExtra("SEANCE");
-        this.mainLayout = findViewById(R.id.jouer_entrainement_mainlayout);
         this.nomTravail = findViewById(R.id.jouer_entrainement_nom_travail);
 
 
@@ -81,12 +80,10 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
             if (cycle.getRepetitions() > nbRepetitionsCycle){
 
                 if (isRepos){
-                    compteur.setTempsTotal(travail.getDuree()*1000);
-                    nomTravail.setText(travail.getNom());
+                    updateInterface(travail.getDuree(),travail.getNom(), Color.RED);
                     isRepos = false;
                 }else{
-                    compteur.setTempsTotal(cycle.getRepos()*1000);
-                    nomTravail.setText("Repos");
+                    updateInterface(cycle.getRepos(),"Repos",Color.CYAN);
                     isRepos = true;
                     nbRepetitionsCycle++;
                 }
@@ -96,14 +93,20 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
                 nbRepetitionsCycle = 0;
                 nbRepetitionsSequence++;
 
-                compteur.setTempsTotal(sequence.getReposLong()*1000);
-                nomTravail.setText("Repos Long");
+                updateInterface(sequence.getReposLong(),"Repos long", Color.BLUE);
                 isRepos = true;
                 compteur.reset();
             }
         }else{
             nomTravail.setText("Terminé !");
             timerValue.setText("0:00:00");
+            nomTravail.setTextColor(Color.GREEN);
         }
+    }
+
+    private void updateInterface(int temps, String travail, int couleurFond){
+        compteur.setTempsTotal(temps*1000);
+        nomTravail.setText(travail);
+        nomTravail.setTextColor(couleurFond);
     }
 }

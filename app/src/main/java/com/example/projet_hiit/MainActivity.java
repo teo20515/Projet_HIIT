@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Affichage du gif animé
-        Glide.with(getApplicationContext()).load(R.drawable.main_tapis_roulant).into((ImageView) findViewById(R.id.main_gif_container));
-
         //Preparation des données du RecyclerView
         recyclerView = findViewById(R.id.main_rvSeances);
+        recyclerView.setAdapter(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         GetSeancesEnregistrees recupererSeances = new GetSeancesEnregistrees();
         recupererSeances.execute();
+
+        //Affichage du gif animé
+        Glide.with(getApplicationContext()).load(R.drawable.main_tapis_roulant).into((ImageView) findViewById(R.id.main_gif_container));
     }
 
     ///////////// CYCLE DE VIE ////////////////
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
 
         @Override
         protected void onPostExecute(List<Seance> seances){
-            Log.i("Seances recuperees",(seances.size()+1)+" séances récupérées");
+            Log.i("Seances recuperees",(seances.size())+" séances récupérées");
         }
 
     }

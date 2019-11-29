@@ -56,8 +56,14 @@ public class CreerEntrainementActivity extends AppCompatActivity {
 
         SparseArray<EditText> mapEditText = recupererDonnees(); //Met à jour la variable mapEditText avec les données de l'utilisateur
 
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                      VERIFICATION DES DONNEES                                      //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Vérification que tous les champs ont une valeur
         int i = 0; boolean Errors = false;
+
+        String errorMessage = "Champ requis";
         while(i<mapEditText.size() && !Errors){
             Errors = mapEditText.valueAt(i).getText().toString().trim().isEmpty();
             i++;
@@ -65,11 +71,12 @@ public class CreerEntrainementActivity extends AppCompatActivity {
 
         //En cas d'erreur on affiche un message sur le champ problématique et on le séléctionne pour l'utilisateur
         if (Errors){
-            mapEditText.valueAt(i-1).setError("Champ requis");
+            mapEditText.valueAt(i-1).setError(errorMessage);
             mapEditText.valueAt(i-1).requestFocus();
             return; //Stoppe le traitement
         }
 
+        //Création de la séance pour l'enregistrement//
         Travail travail = new Travail(
                 mapEditText.valueAt(NOM_TRAVAIL).getText().toString().trim(),
                 Integer.parseInt(
@@ -120,10 +127,8 @@ public class CreerEntrainementActivity extends AppCompatActivity {
 
         }
 
-
         SaveSeance save = new SaveSeance();
         save.execute();
-
     }
 
 }
