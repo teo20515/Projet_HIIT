@@ -14,153 +14,187 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Creer une nouvelle séance"
-            android:textSize="30sp"
+            android:layout_marginBottom="15sp"
             android:gravity="center"
-            android:textColor="@color/lightBlue"
             android:padding="3sp"
-            android:layout_marginBottom="15sp"/>
+            android:text="Creer une nouvelle séance"
+            android:textColor="@color/lightBlue"
+            android:textSize="30sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/customborder">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Temps de préparation :"
-            android:layout_margin="2sp"/>
+            android:background="@drawable/customborder"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/creerEntrainementPreparation"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2sp"
+                android:text="Temps de préparation :"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/creerEntrainementPreparation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Temps de préparation initial en secondes"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Temps de préparation initial en secondes"
-            android:backgroundTint="@color/midBlue"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15sp"
-        android:background="@drawable/customborder">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Travail : "/>
+            android:layout_marginTop="15sp"
+            android:background="@drawable/customborder"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/creerEntrainementNomTravail"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Travail : "
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/creerEntrainementNomTravail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Nom du travail"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/creerEntrainementDureeTravail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Durée du travail en secondes"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15sp"
+                android:text="Durée du repos :"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/creerEntrainementDureeRepos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Durée du repos en secondes"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:text="Nombre de répétitions du cycle :"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/creerEntrainementRepetitionsCycle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Nombre de répétitions"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="text"
-            android:hint="Nom du travail"
-            android:backgroundTint="@color/midBlue"/>
-
-        <EditText
-            android:id="@+id/creerEntrainementDureeTravail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Durée du travail en secondes"
-            android:backgroundTint="@color/midBlue"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:text="Durée du repos :"
-            android:layout_marginTop="15sp"/>
-
-        <EditText
-            android:id="@+id/creerEntrainementDureeRepos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Durée du repos en secondes"
-            android:backgroundTint="@color/midBlue"/>
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Nombre de répétitions du cycle :"
-            android:layout_marginTop="15sp"/>
+            android:layout_marginTop="15sp"
+            android:background="@drawable/customborder"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temps de repos long"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/creerEntrainementRepetitionsCycle"
+            <EditText
+                android:id="@+id/creerEntrainementDureeReposLong"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Temps de repos long en secondes"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Nombre de répétitions"
-            android:backgroundTint="@color/midBlue"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15sp"
-        android:background="@drawable/customborder">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Temps de repos long"/>
+            android:layout_marginTop="15sp"
+            android:background="@drawable/customborder"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/creerEntrainementDureeReposLong"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Nombre de répétitions de la séquence"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/creerEntrainementRepetitionsSequence"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/midBlue"
+                android:hint="Nombre de répétitions"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Temps de repos long en secondes"
-            android:backgroundTint="@color/midBlue"/>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="100sp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15sp"
+                android:layout_marginEnd="20sp"
+                android:background="@color/midBlue"
+                android:onClick="enregistrer"
+                android:padding="10sp"
+                android:text="Enregistrer"
+                android:textColor="@color/white" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15sp"
-        android:background="@drawable/customborder">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="15sp"
+                android:background="@color/midBlue"
+                android:onClick="enregistrerEtJouer"
+                android:padding="10sp"
+                android:text="Enregistrer et jouer"
+                android:textColor="@color/white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:text="Nombre de répétitions de la séquence"/>
-
-        <EditText
-            android:id="@+id/creerEntrainementRepetitionsSequence"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="Nombre de répétitions"
-            android:backgroundTint="@color/midBlue" />
-
-    </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Valider"
             android:layout_gravity="center"
-            android:onClick="creerNouvelleSeance"
             android:layout_marginTop="15sp"
             android:background="@color/midBlue"
-            android:textColor="@color/white"/>
+            android:onClick="jouerSansEnregistrer"
+            android:padding="10sp"
+            android:text="Jouer sans enregistrer"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

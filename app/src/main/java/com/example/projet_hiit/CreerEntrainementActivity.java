@@ -1,12 +1,15 @@
 package com.example.projet_hiit;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projet_hiit.db.DatabaseClient;
@@ -29,6 +32,9 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     private static final int DUREE_REPOS_LONG = 5;
     private static final int REPETITIONS_SEQUENCE = 6;
 
+    //Donnees
+    SparseArray<EditText> mapEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,43 +44,91 @@ public class CreerEntrainementActivity extends AppCompatActivity {
         db = DatabaseClient.getInstance(getApplicationContext());
     }
 
-    //Recupere les données entrées par l'utilisateur
-    private SparseArray<EditText> recupererDonnees(){
-        SparseArray<EditText> array = new SparseArray<>();  //Optimal pour des clés de type Integer par rapport à une HashMap
-        array.put(NOM_TRAVAIL,((EditText) findViewById(R.id.creerEntrainementNomTravail)));
-        array.put(DUREE_TRAVAIL,((EditText)findViewById(R.id.creerEntrainementDureeTravail)));
-        array.put(DUREE_REPOS,((EditText)findViewById(R.id.creerEntrainementDureeRepos)));
-        array.put(REPETITIONS_CYCLE,((EditText)findViewById(R.id.creerEntrainementRepetitionsCycle)));
-        array.put(DUREE_REPOS_LONG,((EditText)findViewById(R.id.creerEntrainementDureeReposLong)));
-        array.put(REPETITIONS_SEQUENCE,((EditText)findViewById(R.id.creerEntrainementRepetitionsSequence)));
-        array.put(PREPARATION,((EditText)findViewById(R.id.creerEntrainementPreparation)));
-
-        return array;
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        SparseArray<EditText> data = recupererDonnees();
+        for (int i=0; i<=6; i++){
+            outState.putString(String.valueOf(i),data.get(i).getText().toString());
+        }
     }
 
-    public void creerNouvelleSeance(View view) {
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        SparseArray<EditText> data = recupererDonnees();
+        for (int i=0; i<=6; i++){
+            data.get(i).setText(savedInstanceState.getString(String.valueOf(i)));
+        }
+    }
 
-        SparseArray<EditText> mapEditText = recupererDonnees(); //Met à jour la variable mapEditText avec les données de l'utilisateur
 
 
+    public Seance save(View view) {
+        mapEditText = recupererDonnees();
+        if(!verifierDonneesValides()){
+            return null;
+        }
+        Seance seance = creerNouvelleSeance(view);
+
+        SaveSeance save = new SaveSeance(seance);
+        save.execute();
+        return seance;
+    }
+
+    public void enregistrer(View view){
+        Seance seance = save(view);
+        if (seance == null){
+            return;
+        }
+        finish();
+    }
+
+    public void enregistrerEtJouer(View view) {
+        Seance seance = save(view);
+        if (seance == null){
+            return;
+        }
+        Intent intent = new Intent(this,JouerEntrainementActivity.class);
+        intent.putExtra("SEANCE",seance);
+        startActivity(intent);
+    }
+
+    public void jouerSansEnregistrer(View view) {
+        mapEditText = recupererDonnees();
+        if (!verifierDonneesValides()){
+            return;
+        }
+        Seance seance = creerNouvelleSeance(view);
+        Intent intent = new Intent(this,JouerEntrainementActivity.class);
+        intent.putExtra("SEANCE",seance);
+        startActivity(intent);
+    }
+
+    public boolean verifierDonneesValides(){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
         //                                      VERIFICATION DES DONNEES                                      //
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Vérification que tous les champs ont une valeur
-        int i = 0; boolean Errors = false;
+        int i = 0;
+        try {
+            while(i<mapEditText.size()){
+                if(mapEditText.valueAt(i).getText().toString().trim().isEmpty()){
+                    throw new NumberFormatException("Champ requis");
+                }else if(mapEditText.valueAt(i).getInputType() == InputType.TYPE_CLASS_NUMBER && Integer.valueOf(mapEditText.valueAt(i).getText().toString()) <= 0){
+                    throw new NumberFormatException("Cette valeur doit être positive");
+                }
 
-        String errorMessage = "Champ requis";
-        while(i<mapEditText.size() && !Errors){
-            Errors = mapEditText.valueAt(i).getText().toString().trim().isEmpty();
-            i++;
+                i++;
+            }
+        }catch (NumberFormatException e){
+            mapEditText.valueAt(i).setError(e.getMessage());
+            mapEditText.valueAt(i).requestFocus();
+            return false; //Stoppe le traitement
         }
+        return true;
+    }
 
-        //En cas d'erreur on affiche un message sur le champ problématique et on le séléctionne pour l'utilisateur
-        if (Errors){
-            mapEditText.valueAt(i-1).setError(errorMessage);
-            mapEditText.valueAt(i-1).requestFocus();
-            return; //Stoppe le traitement
-        }
+    public Seance creerNouvelleSeance(View view) {
 
         //Création de la séance pour l'enregistrement//
         Travail travail = new Travail(
@@ -102,33 +156,47 @@ public class CreerEntrainementActivity extends AppCompatActivity {
                 )
         );
 
-        final Seance seance = new Seance(sequence,
+        return new Seance(sequence,
                 Integer.parseInt(
                         mapEditText.valueAt(PREPARATION).getText().toString().trim()
                 )
         );
-
-
-        class SaveSeance extends AsyncTask<Void, Void, Seance>{
-
-            @Override
-            protected Seance doInBackground(Void... voids) {
-
-                db.getAppDatabase().seanceDao().insert(seance);
-
-                return seance;
-            }
-
-            @Override
-            protected void onPostExecute(Seance seance){
-                finish();
-                Toast.makeText(getApplicationContext(), "Séance sauvegardée",Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-        SaveSeance save = new SaveSeance();
-        save.execute();
     }
 
+    //Recupere les données entrées par l'utilisateur
+    private SparseArray<EditText> recupererDonnees(){
+        SparseArray<EditText> array = new SparseArray<>();  //Optimal pour des clés de type Integer par rapport à une HashMap
+        array.put(NOM_TRAVAIL,((EditText) findViewById(R.id.creerEntrainementNomTravail)));
+        array.put(DUREE_TRAVAIL,((EditText)findViewById(R.id.creerEntrainementDureeTravail)));
+        array.put(DUREE_REPOS,((EditText)findViewById(R.id.creerEntrainementDureeRepos)));
+        array.put(REPETITIONS_CYCLE,((EditText)findViewById(R.id.creerEntrainementRepetitionsCycle)));
+        array.put(DUREE_REPOS_LONG,((EditText)findViewById(R.id.creerEntrainementDureeReposLong)));
+        array.put(REPETITIONS_SEQUENCE,((EditText)findViewById(R.id.creerEntrainementRepetitionsSequence)));
+        array.put(PREPARATION,((EditText)findViewById(R.id.creerEntrainementPreparation)));
+
+        return array;
+    }
+
+    class SaveSeance extends AsyncTask<Void, Void, Seance>{
+
+        private Seance seance;
+
+        private SaveSeance(Seance seance) {
+            this.seance = seance;
+        }
+
+        @Override
+        protected Seance doInBackground(Void... voids) {
+
+            db.getAppDatabase().seanceDao().insert(seance);
+
+            return seance;
+        }
+
+        @Override
+        protected void onPostExecute(Seance seance){
+            Toast.makeText(getApplicationContext(), "Séance sauvegardée",Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

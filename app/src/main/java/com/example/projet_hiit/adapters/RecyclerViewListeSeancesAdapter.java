@@ -95,9 +95,9 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         String nomTravail = data.get(position).getSequence().getCycle().getTravail().getNom();
         String dureeTravail = String.valueOf(data.get(position).getSequence().getCycle().getTravail().getDuree());
         String dureeRepos = String.valueOf(data.get(position).getSequence().getCycle().getRepos());
-        String nbRepetitionsCycle = "x"+String.valueOf(data.get(position).getSequence().getCycle().getRepetitions());
+        String nbRepetitionsCycle = "x"+ data.get(position).getSequence().getCycle().getRepetitions();
         String dureeReposLong = String.valueOf(data.get(position).getSequence().getReposLong());
-        String nbRepetitionsSequence = "x"+String.valueOf(data.get(position).getSequence().getRepetitions());
+        String nbRepetitionsSequence = "x"+ data.get(position).getSequence().getRepetitions();
 
         holder.dureePreparation.setText(tempsPreparation);
         holder.nomTravail.setText(nomTravail);

@@ -1,13 +1,12 @@
 package com.example.projet_hiit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projet_hiit.db.compteur.Compteur;
 import com.example.projet_hiit.db.compteur.OnUpdateListener;
@@ -49,7 +48,6 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
             Toast.makeText(getApplicationContext(), "Aucune séance n\'a été trouvée",Toast.LENGTH_LONG).show();
             finish();
         }
-
     }
 
     public void pausePlay(View view) {
@@ -101,6 +99,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
             nomTravail.setText("Terminé !");
             timerValue.setText("0:00:00");
             nomTravail.setTextColor(Color.GREEN);
+            findViewById(R.id.bouton_pauseplay).setEnabled(false);
         }
     }
 

@@ -3,20 +3,18 @@ package com.example.projet_hiit;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.projet_hiit.adapters.RecyclerViewListeSeancesAdapter;
 import com.example.projet_hiit.db.DatabaseClient;
 import com.example.projet_hiit.db.model.Seance;
 
-import java.io.Console;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewListeSeancesAdapter.ItemClickListener, RecyclerViewListeSeancesAdapter.ItemLongClickListener {
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
 
         @Override
         protected void onPostExecute(List<Seance> seances){
-            Log.i("Seances recuperees",(seances.size())+" séances récupérées");
+            //Log.i("Seances recuperees",(seances.size())+" séances récupérées");
         }
 
     }
