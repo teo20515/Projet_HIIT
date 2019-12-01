@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projet_hiit.db.compteur.Compteur;
@@ -27,6 +28,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
     private int nbRepetitionsCycle = 0;
     private int nbRepetitionsSequence = 0;
     private boolean isRepos = true;
+    private boolean isTermine = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +40,57 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         this.seance = getIntent().getParcelableExtra("SEANCE");
         this.nomTravail = findViewById(R.id.jouer_entrainement_nom_travail);
 
-
-        if (seance != null){
+        if(savedInstanceState != null && savedInstanceState.getBoolean("ISTERMINE")){
+            termine();
+        }
+        else if(savedInstanceState != null && savedInstanceState.getParcelable("SEANCE") != null){
+            //SEANCE (this.seance)
+            this.seance = savedInstanceState.getParcelable("SEANCE");
+            //COMPTEUR
+            this.compteur = new Compteur(savedInstanceState.getLong("TEMPSRESTANT"));
+            this.compteur.addOnUpdateListener(this);
+            this.timerValue.setText(compteur.getMinutes() + ":" + String.format("%02d", compteur.getSecondes()) + ":" + String.format("%03d", compteur.getMillisecondes()));
+            //NOMTRAVAIL
+            this.nomTravail.setText(savedInstanceState.getString("NOMTRAVAIL"));
+            //ISREPOS
+            this.isRepos = savedInstanceState.getBoolean("ISREPOS");
+            //NBREPETITIONSCYCLE
+            this.nbRepetitionsCycle = savedInstanceState.getInt("NBREPETITIONSCYCLE");
+            //NBRERETITIONSSEQUENCE
+            this.nbRepetitionsSequence = savedInstanceState.getInt("NBREPETITIONSSEQUENCE");
+            //MISE A JOUR DE L'INTERFACE
+            updateInterface((this.compteur.getMilisecondesRestantes()/1000),this.nomTravail.getText().toString(),savedInstanceState.getInt("COULEUR"));
+            //IS PAUSED
+            if(savedInstanceState.getBoolean("ISPAUSED")){
+                compteur.pause();
+            }else{
+                compteur.start();
+            }
+        } else if (seance != null){
             this.compteur = new Compteur(seance.getPreparation()*1000);   //Met le compteur sur le temps de préparation initial
             compteur.addOnUpdateListener(this);
             nomTravail.setText("Preparation");
             compteur.start();
         }else{
-            Toast.makeText(getApplicationContext(), "Aucune séance n\'a été trouvée",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Aucune séance n\'a été trouvée",Toast.LENGTH_LONG).show();
             finish();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (isTermine()){
+            outState.putBoolean("ISTERMINE",true);
+        }else {
+            outState.putParcelable("SEANCE", this.seance);
+            outState.putLong("TEMPSRESTANT", this.compteur.getMilisecondesRestantes());
+            outState.putString("NOMTRAVAIL", this.nomTravail.getText().toString());
+            outState.putBoolean("ISREPOS", this.isRepos);
+            outState.putInt("NBREPETITIONSCYCLE", this.nbRepetitionsCycle);
+            outState.putInt("NBREPETITIONSSEQUENCE", this.nbRepetitionsSequence);
+            outState.putInt("COULEUR", this.nomTravail.getCurrentTextColor());
+            outState.putBoolean("ISPAUSED", this.compteur.isPaused());
         }
     }
 
@@ -96,16 +140,25 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
                 compteur.reset();
             }
         }else{
-            nomTravail.setText("Terminé !");
-            timerValue.setText("0:00:00");
-            nomTravail.setTextColor(Color.GREEN);
-            findViewById(R.id.bouton_pauseplay).setEnabled(false);
+            termine();
         }
     }
 
-    private void updateInterface(int temps, String travail, int couleurFond){
+    private void updateInterface(long temps, String travail, int couleurFond){
         compteur.setTempsTotal(temps*1000);
         nomTravail.setText(travail);
         nomTravail.setTextColor(couleurFond);
+    }
+
+    private void termine(){
+        this.isTermine = true;
+        nomTravail.setText("Terminé !");
+        timerValue.setText("0:00:00");
+        nomTravail.setTextColor(Color.GREEN);
+        findViewById(R.id.bouton_pauseplay).setEnabled(false);
+    }
+
+    public boolean isTermine(){
+        return this.isTermine;
     }
 }
