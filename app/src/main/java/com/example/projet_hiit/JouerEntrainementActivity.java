@@ -1,7 +1,9 @@
 package com.example.projet_hiit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import com.example.projet_hiit.db.model.Seance;
 import com.example.projet_hiit.db.model.Sequence;
 import com.example.projet_hiit.db.model.Travail;
 
+import java.util.HashMap;
+
 public class JouerEntrainementActivity extends AppCompatActivity implements OnUpdateListener {
 
     //View
@@ -31,6 +35,14 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
     private boolean isRepos = true;
     private boolean isTermine = false;
 
+    //SON
+    private static SoundPool soundPool;
+    private static HashMap<Integer,SoundPool> soundPoolMap;
+    private static final int SON_PERPARATION = 0;
+    private static final int SON_TRAVAIL = 1;
+    private static final int SON_REPOS = 2;
+    private static final int SON_TERMINE = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +52,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         this.timerValue = findViewById(R.id.timerValue);
         this.seance = getIntent().getParcelableExtra("SEANCE");
         this.nomTravail = findViewById(R.id.jouer_entrainement_nom_travail);
+        initialiserSons(getApplicationContext());
 
         if(savedInstanceState != null && savedInstanceState.getBoolean("ISTERMINE")){
             termine();
@@ -71,6 +84,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
             this.compteur = new Compteur(seance.getPreparation()*1000);   //Met le compteur sur le temps de préparation initial
             compteur.addOnUpdateListener(this);
             nomTravail.setText("Preparation");
+
             compteur.start();
         }else{
             Toast.makeText(getApplicationContext(),"Aucune séance n\'a été trouvée",Toast.LENGTH_LONG).show();
@@ -102,12 +116,26 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         startActivity(intent);
     }
 
+
+
+    private void initialiserSons(Context context) {
+        soundPool = new SoundPool.Builder().build();
+        soundPoolMap.put(SON_PERPARATION, soundPool.load());
+        soundPoolMap.put(SON_TRAVAIL, soundPool.load());
+        soundPoolMap.put(SON_REPOS, soundPool.load());
+        soundPoolMap.put(SON_TERMINE, soundPool.load());
+    }
+
     public void pausePlay(View view) {
         if (compteur.isPaused()){
             compteur.start();
         }else{
             compteur.pause();
         }
+    }
+
+    public void playSound(Context context, int soundId){
+        //TODO
     }
 
     @Override
