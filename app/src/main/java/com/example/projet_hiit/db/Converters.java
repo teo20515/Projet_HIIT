@@ -8,6 +8,7 @@ import com.example.projet_hiit.db.model.Sequence;
 import com.example.projet_hiit.db.model.Travail;
 import com.google.gson.Gson;
 
+//Permet de convertir les objets en chaine de caractère (Json) afin de pouvoir les sauvegarder en base de données
 public class Converters {
 
     private static Gson gson = new Gson();

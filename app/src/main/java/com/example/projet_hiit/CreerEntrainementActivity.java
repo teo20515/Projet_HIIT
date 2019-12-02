@@ -47,6 +47,8 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        //Sauvegarde la valeur des différents champs et les place dans le bundle
         SparseArray<EditText> data = recupererDonnees();
         for (int i=0; i<=6; i++){
             outState.putString(String.valueOf(i),data.get(i).getText().toString());
@@ -56,6 +58,8 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        //Restaure la valeur des différents champs sauvegardés
         SparseArray<EditText> data = recupererDonnees();
         for (int i=0; i<=6; i++){
             data.get(i).setText(savedInstanceState.getString(String.valueOf(i)));
@@ -63,16 +67,19 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     }
 
 
-
+    //Méthode de sauvegarde de la séance en base de données
     public Seance save(View view) {
         mapEditText = recupererDonnees();
-        if(!verifierDonneesValides()){
-            return null;
-        }
-        Seance seance = creerNouvelleSeance(view);
 
-        SaveSeance save = new SaveSeance(seance);
+        if(!verifierDonneesValides()){
+            return null;    //Si les données ne sont pas valides on stoppe le traitement (retour à la vue)
+        }
+
+        Seance seance = creerNouvelleSeance(view);  //Création de l'objet séance
+
+        SaveSeance save = new SaveSeance(seance);   //Sauvegarde en base de données
         save.execute();
+
         return seance;
     }
 
@@ -87,8 +94,10 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     public void enregistrerEtJouer(View view) {
         Seance seance = save(view);
         if (seance == null){
-            return;
+            return;     //Si les données ne sont pas valides on stoppe le traitement (retour à la vue)
         }
+
+        //Lancement de l'entrainement
         Intent intent = new Intent(this,JouerEntrainementActivity.class);
         intent.putExtra("SEANCE",seance);
         startActivity(intent);
@@ -97,7 +106,7 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     public void jouerSansEnregistrer(View view) {
         mapEditText = recupererDonnees();
         if (!verifierDonneesValides()){
-            return;
+            return;     //Si les données ne sont pas valides on stoppe le traitement (retour à la vue)
         }
         Seance seance = creerNouvelleSeance(view);
         Intent intent = new Intent(this,JouerEntrainementActivity.class);
@@ -106,31 +115,28 @@ public class CreerEntrainementActivity extends AppCompatActivity {
     }
 
     public boolean verifierDonneesValides(){
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                      VERIFICATION DES DONNEES                                      //
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
         int i = 0;
         try {
             while(i<mapEditText.size()){
                 if(mapEditText.valueAt(i).getText().toString().trim().isEmpty()){
-                    throw new NumberFormatException("Champ requis");
+                    throw new NumberFormatException("Champ requis");        //Si un des champs est vide on leve une exception
                 }else if(mapEditText.valueAt(i).getInputType() == InputType.TYPE_CLASS_NUMBER && Integer.valueOf(mapEditText.valueAt(i).getText().toString()) <= 0){
-                    throw new NumberFormatException("Cette valeur doit être positive");
+                    throw new NumberFormatException("Cette valeur doit être positive");     //Si un des champs contenant un nombre est nul on leve une exception
                 }
 
                 i++;
             }
         }catch (NumberFormatException e){
-            mapEditText.valueAt(i).setError(e.getMessage());
-            mapEditText.valueAt(i).requestFocus();
-            return false; //Stoppe le traitement
+            mapEditText.valueAt(i).setError(e.getMessage());    //Affichage du message d'erreur sur le champ correspondant
+            mapEditText.valueAt(i).requestFocus();      //Selectionne le champ pour l'utilisateur
+            return false;
         }
         return true;
     }
 
     public Seance creerNouvelleSeance(View view) {
 
-        //Création de la séance pour l'enregistrement//
+        //Création de la séance et de ses composants pour l'enregistrement
         Travail travail = new Travail(
                 mapEditText.valueAt(NOM_TRAVAIL).getText().toString().trim(),
                 Integer.parseInt(
@@ -177,6 +183,7 @@ public class CreerEntrainementActivity extends AppCompatActivity {
         return array;
     }
 
+    //Enregistre la séance en base de données
     class SaveSeance extends AsyncTask<Void, Void, Seance>{
 
         private Seance seance;

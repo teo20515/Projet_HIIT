@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         recyclerView.setAdapter(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         registerForContextMenu(recyclerView);
+
+        //Recupération des séances en base de données
         GetSeancesEnregistrees recupererSeances = new GetSeancesEnregistrees();
         recupererSeances.execute();
 
@@ -78,8 +80,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
 
         //Switch si on souhaite implémenter d'autres options par la suite
         switch (item.getItemId()){
-            case R.id.main_menu_supprimer:
-                new SupprimerSeance().execute(adapter.getItem(position));
+            case R.id.main_menu_supprimer:  //Si l'utilisateur séléctionne l'action supprimer dans le menu
+                new SupprimerSeance().execute(adapter.getItem(position));   //Suppression de la séance de la base de données
+
+                //Suppression de la recyclerview correspondante
                 adapter.removeItem(position);
                 adapter.notifyItemRemoved(position);
                 adapter.notifyDataSetChanged();
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                //Remplis le recyclerview avec les données récupérées
                 adapter = new RecyclerViewListeSeancesAdapter(getApplicationContext(), seances);
                 adapter.setClickListener(mainActivity);
                 adapter.setLongClickListener(mainActivity);
@@ -102,9 +107,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
     }
 
     @Override
-    public void onLongItemClick(View view, int position) {
-
-    }
+    public void onLongItemClick(View view, int position) {}
 
     class GetSeancesEnregistrees extends AsyncTask<Void, Void, List<Seance>> {
 
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         protected List<Seance> doInBackground(Void... voids) {
             DatabaseClient db = DatabaseClient.getInstance(getApplicationContext());
 
+            //Récuperation des séances en base et les fait afficher
             List<Seance> seances = db.getAppDatabase().seanceDao().getAll();
             populateListeSeances(seances);
 
@@ -130,9 +134,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         @Override
         protected Void doInBackground(Seance... seances) {
 
+            //Supprime la séance choisie de la base de données
             DatabaseClient db = DatabaseClient.getInstance(getApplicationContext());
             Seance seance = seances[0];
-
             db.getAppDatabase().seanceDao().delete(seance);
             return null;
         }

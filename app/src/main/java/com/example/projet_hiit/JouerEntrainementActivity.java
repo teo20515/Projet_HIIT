@@ -1,9 +1,8 @@
 package com.example.projet_hiit;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.SoundPool;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,8 +17,6 @@ import com.example.projet_hiit.db.model.Cycle;
 import com.example.projet_hiit.db.model.Seance;
 import com.example.projet_hiit.db.model.Sequence;
 import com.example.projet_hiit.db.model.Travail;
-
-import java.util.HashMap;
 
 public class JouerEntrainementActivity extends AppCompatActivity implements OnUpdateListener {
 
@@ -36,12 +33,8 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
     private boolean isTermine = false;
 
     //SON
-    private static SoundPool soundPool;
-    private static HashMap<Integer,SoundPool> soundPoolMap;
-    private static final int SON_PERPARATION = 0;
-    private static final int SON_TRAVAIL = 1;
-    private static final int SON_REPOS = 2;
-    private static final int SON_TERMINE = 3;
+    MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +45,16 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         this.timerValue = findViewById(R.id.timerValue);
         this.seance = getIntent().getParcelableExtra("SEANCE");
         this.nomTravail = findViewById(R.id.jouer_entrainement_nom_travail);
-        initialiserSons(getApplicationContext());
+
 
         if(savedInstanceState != null && savedInstanceState.getBoolean("ISTERMINE")){
-            termine();
+            termine();  //Si on a une séance enregistrée comme étant terminée on affiche l'état terminé
         }
         else if(savedInstanceState != null && savedInstanceState.getParcelable("SEANCE") != null){
-            //SEANCE (this.seance)
+
+            //Restauration du contexte sauvegardé
+
+            //SEANCE
             this.seance = savedInstanceState.getParcelable("SEANCE");
             //COMPTEUR
             this.compteur = new Compteur(savedInstanceState.getLong("TEMPSRESTANT"));
@@ -81,9 +77,15 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
                 compteur.start();
             }
         } else if (seance != null){
+            //Si aucun contexte sauvegardé n'est trouvé on lance un nouvel entrainement
             this.compteur = new Compteur(seance.getPreparation()*1000);   //Met le compteur sur le temps de préparation initial
+
             compteur.addOnUpdateListener(this);
+
             nomTravail.setText("Preparation");
+
+            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.sifflet_debut);
+            mediaPlayer.start();
 
             compteur.start();
         }else{
@@ -95,6 +97,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        //Sauvegarde des éléments nécessaires à la restauration de la séance d'entrainement
         if (isTermine()){
             outState.putBoolean("ISTERMINE",true);
         }else {
@@ -111,22 +114,29 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        //Libère les ressources du mediaPlayer
+        if(mediaPlayer != null)
+            mediaPlayer.release();
+        mediaPlayer = null;
+
+        //Retour direct à la MainActivity
+        Intent intent = new Intent(JouerEntrainementActivity.this,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
-
-
-    private void initialiserSons(Context context) {
-        soundPool = new SoundPool.Builder().build();
-        soundPoolMap.put(SON_PERPARATION, soundPool.load());
-        soundPoolMap.put(SON_TRAVAIL, soundPool.load());
-        soundPoolMap.put(SON_REPOS, soundPool.load());
-        soundPoolMap.put(SON_TERMINE, soundPool.load());
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Libère les ressources du mediaPlayer
+        if (mediaPlayer != null)
+            mediaPlayer.release();
+        mediaPlayer = null;
     }
 
     public void pausePlay(View view) {
+        //Change l'état du compteur
         if (compteur.isPaused()){
             compteur.start();
         }else{
@@ -134,12 +144,9 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         }
     }
 
-    public void playSound(Context context, int soundId){
-        //TODO
-    }
-
     @Override
     public void onUpdate() {
+        //Si il reste du temps à passer, on pet à jour le texte du compteur, sinon on change d'étape
         if (compteur.getMilisecondesRestantes() != 0){
             timerValue.setText(compteur.getMinutes() + ":" + String.format("%02d", compteur.getSecondes()) + ":" + String.format("%03d", compteur.getMillisecondes()));
         }else{
@@ -154,29 +161,29 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         Travail travail = cycle.getTravail();
 
 
-        if (sequence.getRepetitions() > nbRepetitionsSequence){
-            if (cycle.getRepetitions() > nbRepetitionsCycle){
+        if (sequence.getRepetitions() > nbRepetitionsSequence){ //Si il reste des répétitions de séquence
+            if (cycle.getRepetitions() > nbRepetitionsCycle){  //Si il reste des répétitions au cycle en cours
 
-                if (isRepos){
-                    updateInterface(travail.getDuree(),travail.getNom(), Color.RED);
+                if (isRepos){   //Si on était en état "repos"
+                    updateInterface(travail.getDuree(),travail.getNom(), Color.RED);    //Mise à jour de l'interface avec le travail
                     isRepos = false;
                 }else{
-                    updateInterface(cycle.getRepos(),"Repos",Color.CYAN);
+                    updateInterface(cycle.getRepos(),"Repos",Color.CYAN);   //Mise à jour de l'interface en mode "repos"
                     isRepos = true;
-                    nbRepetitionsCycle++;
+                    nbRepetitionsCycle++;   //Augmentation du nombre de cycle passés
                 }
                 compteur.reset();
 
             }else{
-                nbRepetitionsCycle = 0;
-                nbRepetitionsSequence++;
+                nbRepetitionsCycle = 0; //Si on a fait le nombre de répétition du cycle, on le réinitialise
+                nbRepetitionsSequence++;    //Et on incrémente le nombre de séquences
 
-                updateInterface(sequence.getReposLong(),"Repos long", Color.BLUE);
+                updateInterface(sequence.getReposLong(),"Repos long", Color.BLUE);  //Mise à jour de l'interface en mode "repos long"
                 isRepos = true;
                 compteur.reset();
             }
         }else{
-            termine();
+            termine();  //Si le nombre de répétitions de la séquence est atteint, on termine l'entrainement
         }
     }
 
@@ -191,8 +198,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         nomTravail.setText("Terminé !");
         timerValue.setText("0:00:00");
         nomTravail.setTextColor(Color.GREEN);
-        findViewById(R.id.bouton_pauseplay).setEnabled(false);
-        //TODO ajouter du son
+        findViewById(R.id.bouton_pauseplay).setEnabled(false);  //On désactive le bouton de controle du timer une fois terminé
     }
 
     public boolean isTermine(){

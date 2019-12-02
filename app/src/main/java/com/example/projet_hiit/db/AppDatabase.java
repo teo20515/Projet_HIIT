@@ -14,8 +14,5 @@ import com.example.projet_hiit.db.model.Travail;
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract SeanceDao seanceDao();
-    public abstract CycleDao cycledao();
-    public abstract SequenceDao sequenceDao();
-    public abstract TravailDao travailDao();
 
 }

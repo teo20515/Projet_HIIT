@@ -24,7 +24,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
     private ItemClickListener clickListener;
     private ItemLongClickListener longClickListener;
 
-    //Pour le menu
+    //Utilisé pour le menu lors d'un appui long sur une séance
     private int position;
 
     public RecyclerViewListeSeancesAdapter(Context context, List<Seance> data) {
@@ -61,6 +61,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
             seance.setOnClickListener(this);
             seance.setOnLongClickListener(this);
 
+            //Récupération des différentes zones de texte à remplir
             dureePreparation = itemView.findViewById(R.id.rv_dureePreparation);
             nomTravail = itemView.findViewById(R.id.rv_nomTravail);
             dureeTravail = itemView.findViewById(R.id.rv_dureeTravail);
@@ -75,15 +76,15 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         @Override
         public void onClick(View view){
             if(clickListener != null){
-                clickListener.onItemClick(view, getAdapterPosition());
+                clickListener.onItemClick(view, getAdapterPosition());  //Renvoie la position dans la liste de la séance cliquée
             }
         }
 
         @Override
         public boolean onLongClick(View view) {
             if(longClickListener != null){
-                setPosition(getAdapterPosition());
-                itemView.showContextMenu();
+                setPosition(getAdapterPosition());// Prépare un attribu position qui sera accédé plus tard
+                itemView.showContextMenu(); //Affiche le menu contextuel
                 return true;
             }
             return false;
@@ -91,7 +92,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(Menu.NONE,R.id.main_menu_supprimer,Menu.NONE,"Supprimer");
+            menu.add(Menu.NONE,R.id.main_menu_supprimer,Menu.NONE,"Supprimer"); //Ajoute une option au menu (la seule dans l'état actuel)
         }
     }
 
@@ -104,7 +105,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Insérer les données de l'utilisateur
+        //Récupération des données d'une séance
         String tempsPreparation = String.valueOf(data.get(position).getPreparation());
         String nomTravail = data.get(position).getSequence().getCycle().getTravail().getNom();
         String dureeTravail = String.valueOf(data.get(position).getSequence().getCycle().getTravail().getDuree());
@@ -113,6 +114,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         String dureeReposLong = String.valueOf(data.get(position).getSequence().getReposLong());
         String nbRepetitionsSequence = "x"+ data.get(position).getSequence().getRepetitions();
 
+        //Affichage des données dans le RecyclerView
         holder.dureePreparation.setText(tempsPreparation);
         holder.nomTravail.setText(nomTravail);
         holder.dureeTravail.setText(dureeTravail);
@@ -141,10 +143,6 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
 
     public void setLongClickListener(ItemLongClickListener itemLongClickListener){
         this.longClickListener = itemLongClickListener;
-    }
-
-    public void setData(List<Seance> data) {
-        this.data = data;
     }
 
     public int getPosition() {
