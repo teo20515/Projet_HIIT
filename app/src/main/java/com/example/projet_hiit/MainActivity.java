@@ -3,9 +3,11 @@ package com.example.projet_hiit;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
         recyclerView = findViewById(R.id.main_rvSeances);
         recyclerView.setAdapter(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        registerForContextMenu(recyclerView);
         GetSeancesEnregistrees recupererSeances = new GetSeancesEnregistrees();
         recupererSeances.execute();
 
@@ -70,10 +73,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
 
     ///////////// ACTIONS DANS L'ACTIVITE ////////////////
     @Override
-    public void onLongItemClick(View view, int position) {
-        //Permettre de supprimer la séance
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = adapter.getPosition();
 
-
+        //Switch si on souhaite implémenter d'autres options par la suite
+        switch (item.getItemId()){
+            case R.id.main_menu_supprimer:
+                new SupprimerSeance().execute(adapter.getItem(position));
+                adapter.removeItem(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     ///////////// MISE A JOUR DES DONNEES DE LA LISTE DE SEANCE ////////////////
@@ -87,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
                 recyclerView.setAdapter(adapter);
             }
         });
+    }
+
+    @Override
+    public void onLongItemClick(View view, int position) {
+
     }
 
     class GetSeancesEnregistrees extends AsyncTask<Void, Void, List<Seance>> {
@@ -106,5 +123,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewListe
             //Log.i("Seances recuperees",(seances.size())+" séances récupérées");
         }
 
+    }
+
+    class SupprimerSeance extends AsyncTask<Seance, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Seance... seances) {
+
+            DatabaseClient db = DatabaseClient.getInstance(getApplicationContext());
+            Seance seance = seances[0];
+
+            db.getAppDatabase().seanceDao().delete(seance);
+            return null;
+        }
     }
 }

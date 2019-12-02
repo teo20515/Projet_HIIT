@@ -45,4 +45,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat-resources:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+    //FLEW BOX LAYOUT
+    implementation 'com.google.android:flexbox:2.0.0'
+
 }

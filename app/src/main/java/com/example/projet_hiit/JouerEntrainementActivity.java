@@ -1,5 +1,6 @@
 package com.example.projet_hiit;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -94,6 +95,13 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     public void pausePlay(View view) {
         if (compteur.isPaused()){
             compteur.start();
@@ -156,6 +164,7 @@ public class JouerEntrainementActivity extends AppCompatActivity implements OnUp
         timerValue.setText("0:00:00");
         nomTravail.setTextColor(Color.GREEN);
         findViewById(R.id.bouton_pauseplay).setEnabled(false);
+        //TODO ajouter du son
     }
 
     public boolean isTermine(){

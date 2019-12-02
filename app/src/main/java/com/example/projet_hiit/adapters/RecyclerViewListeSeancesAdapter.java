@@ -1,7 +1,9 @@
 package com.example.projet_hiit.adapters;
 
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -22,6 +24,9 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
     private ItemClickListener clickListener;
     private ItemLongClickListener longClickListener;
 
+    //Pour le menu
+    private int position;
+
     public RecyclerViewListeSeancesAdapter(Context context, List<Seance> data) {
         this.inflater = LayoutInflater.from(context);
         this.data = data;
@@ -37,7 +42,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener,View.OnCreateContextMenuListener{
 
         LinearLayout seance;
         TextView dureePreparation;
@@ -54,6 +59,7 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
             //Seance
             seance = itemView.findViewById(R.id.rvSeance);
             seance.setOnClickListener(this);
+            seance.setOnLongClickListener(this);
 
             dureePreparation = itemView.findViewById(R.id.rv_dureePreparation);
             nomTravail = itemView.findViewById(R.id.rv_nomTravail);
@@ -62,6 +68,8 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
             nbRepetitionsCycle = itemView.findViewById(R.id.rv_nbRepetitionsCycle);
             dureeReposLong = itemView.findViewById(R.id.rv_dureeReposLong);
             nbRepetitionsSequence = itemView.findViewById(R.id.rv_nbRepetitionsSequence);
+
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         @Override
@@ -74,10 +82,16 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         @Override
         public boolean onLongClick(View view) {
             if(longClickListener != null){
-                longClickListener.onLongItemClick(view, getAdapterPosition());
+                setPosition(getAdapterPosition());
+                itemView.showContextMenu();
                 return true;
             }
             return false;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(Menu.NONE,R.id.main_menu_supprimer,Menu.NONE,"Supprimer");
         }
     }
 
@@ -117,6 +131,10 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
         return this.data.get(id);
     }
 
+    public void removeItem(int id){
+        this.data.remove(id);
+    }
+
     public void setClickListener(ItemClickListener itemClickListener){
         this.clickListener = itemClickListener;
     }
@@ -127,5 +145,13 @@ public class RecyclerViewListeSeancesAdapter extends RecyclerView.Adapter<Recycl
 
     public void setData(List<Seance> data) {
         this.data = data;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
